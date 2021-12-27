@@ -1,15 +1,18 @@
-const path = require('path');
+const parse = require('pg-connection-string').parse;
 
+const config = parse(process.env.DATABASE_URL);
 module.exports = ({ env }) => ({
   connection: {
     client: 'postgres',
     connection: {
-      filename: path.join(__dirname, '..', env('DATABASE_FILENAME', '.tmp/data-mhhpm.sql')),
-      host: env('DATABASE_HOST', '127.0.0.1'),
-      port: env.int('DATABASE_PORT', 5432),
-      database: env('DATABASE_NAME', 'strapi-MHHPM'),
-      user: env('DATABASE_USERNAME', 'postgres'),
-      password: env('DATABASE_PASSWORD', 'postgres'),
+      host: config.host,
+      port: config.port,
+      database: config.database,
+      user: config.user,
+      password: config.password,
+      ssl: {
+        rejectUnauthorized: false
+      },
     },
     debug: false,
   },
